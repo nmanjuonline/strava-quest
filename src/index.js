@@ -5,8 +5,8 @@
  * Sends notifications via Telegram when new challenges are found.
  */
 
-// Configuration
-const START_CHALLENGE_ID = 6000; // Adjust to your starting point
+// Configuration - START_CHALLENGE_ID can be overridden via environment variable
+const DEFAULT_START_CHALLENGE_ID = 6000;
 const MAX_CONSECUTIVE_MISSING = 4;
 const USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
 
@@ -23,7 +23,9 @@ export default {
       let knownIds = JSON.parse(await env.CHALLENGE_STORE.get('knownIds') || '[]');
       let failedIds = JSON.parse(await env.CHALLENGE_STORE.get('failedIds') || '[]');
       
-      let currentId = lastTrackedId || START_CHALLENGE_ID;
+      // Use environment variable if set, otherwise use default
+      const startId = env.START_CHALLENGE_ID ? parseInt(env.START_CHALLENGE_ID) : DEFAULT_START_CHALLENGE_ID;
+      let currentId = lastTrackedId || startId;
       let consecutiveMissing = 0;
       let newChallengesFound = [];
       let idsToRetry = [...failedIds];

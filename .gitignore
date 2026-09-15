@@ -1,3 +1,1 @@
-```gitignore
-
-```
+Nothing needs to be added to the .gitignore file based on the provided changes. The modified files (README.md, src/index.js, wrangler.toml) are all source/config files that should not be ignored.
