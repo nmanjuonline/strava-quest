@@ -5,7 +5,7 @@ compatibility_date = "2024-01-01"
 [vars]
 TELEGRAM_BOT_TOKEN = "8727671898:AAGKMxs6tHJWSTceoDuZ7PC6nrjbIEp_6FM"
 TELEGRAM_CHAT_ID = "-1002659605097"
-# START_CHALLENGE_ID = "6000"  # Optional: Override the starting challenge ID
+START_CHALLENGE_ID = "6434"  # Optional: Override the starting challenge ID
 
 # KV Namespace for persistent storage
 [[kv_namespaces]]
@@ -15,3 +15,17 @@ id = "56795d635a774bb19daa34d9b7b217ba"
 # Cron trigger for twice daily execution (adjust times as needed)
 [triggers]
 crons = ["0 8 * * *", "0 20 * * *"]
+
+
+# ...
+[observability.logs]
+enabled = true
+head_sampling_rate = 1
+invocation_logs = true
+persist = true
+
+[observability.traces]
+enabled = true
+head_sampling_rate = 1
+persist = true
+# ...
