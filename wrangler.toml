@@ -3,13 +3,13 @@ main = "src/index.js"
 compatibility_date = "2024-01-01"
 
 [vars]
-TELEGRAM_BOT_TOKEN = "YOUR_TELEGRAM_BOT_TOKEN"
-TELEGRAM_CHAT_ID = "YOUR_TELEGRAM_CHAT_ID"
+TELEGRAM_BOT_TOKEN = "8727671898:AAGKMxs6tHJWSTceoDuZ7PC6nrjbIEp_6FM"
+TELEGRAM_CHAT_ID = "-1002659605097"
 
 # KV Namespace for persistent storage
 [[kv_namespaces]]
 binding = "CHALLENGE_STORE"
-id = "YOUR_KV_NAMESPACE_ID"
+id = "56795d635a774bb19daa34d9b7b217ba"
 
 # Cron trigger for twice daily execution (adjust times as needed)
 [triggers]
