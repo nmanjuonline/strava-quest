@@ -19,7 +19,8 @@ export default {
     
     try {
       // Get the last tracked challenge ID from KV storage
-      const lastTrackedId = await env.CHALLENGE_STORE.get('lastTrackedId', { type: 'number' });
+      const lastTrackedIdText = await env.CHALLENGE_STORE.get('lastTrackedId');
+      const lastTrackedId = lastTrackedIdText ? parseInt(lastTrackedIdText) : null;
       let knownIds = JSON.parse(await env.CHALLENGE_STORE.get('knownIds') || '[]');
       let failedIds = JSON.parse(await env.CHALLENGE_STORE.get('failedIds') || '[]');
       
