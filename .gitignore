@@ -1,8 +1,3 @@
 ```gitignore
 
 ```
-/node_modules
-/package-lock.json
-*.sqlite
-/.vs/strava-quest.slnx
-/.vs/strava-quest/CopilotIndices/18.9.1319.62376
