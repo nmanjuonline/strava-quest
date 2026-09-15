@@ -139,11 +139,28 @@ curl https://your-worker.your-subdomain.workers.dev/challenge/6386
 
 ### Starting Challenge ID
 
-Edit `src/index.js` to change where scanning starts:
+You can configure the starting challenge ID in two ways:
+
+**Option 1: Environment Variable (Recommended)**
+
+Edit `wrangler.toml` and uncomment/set the `START_CHALLENGE_ID` variable:
+
+```toml
+[vars]
+TELEGRAM_BOT_TOKEN = "your_actual_bot_token_here"
+TELEGRAM_CHAT_ID = "your_chat_id_here"
+START_CHALLENGE_ID = "6000"  # Change this value
+```
+
+**Option 2: Default Value in Code**
+
+Edit `src/index.js` to change the default starting ID:
 
 ```javascript
-const START_CHALLENGE_ID = 6000; // Change this value
+const DEFAULT_START_CHALLENGE_ID = 6000; // Change this value
 ```
+
+The environment variable takes precedence over the default value.
 
 ### Consecutive Missing Threshold
 
