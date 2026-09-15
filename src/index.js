@@ -6,7 +6,7 @@
  */
 
 // Configuration - START_CHALLENGE_ID can be overridden via environment variable
-const DEFAULT_START_CHALLENGE_ID = 6000;
+const DEFAULT_START_CHALLENGE_ID = 6430;
 const MAX_CONSECUTIVE_MISSING = 4;
 const USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
 

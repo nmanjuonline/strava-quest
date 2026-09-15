@@ -72,3 +72,9 @@ htmlcov/
 *.swo
 *.tmp
 ```
+```gitignore
+
+```
+/.vs
+/node_modules
+/package-lock.json
