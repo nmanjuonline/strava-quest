@@ -20,8 +20,8 @@ export default {
     try {
       // Get the last tracked challenge ID from KV storage
       const lastTrackedId = await env.CHALLENGE_STORE.get('lastTrackedId', { type: 'number' });
-      const knownIds = JSON.parse(await env.CHALLENGE_STORE.get('knownIds') || '[]');
-      const failedIds = JSON.parse(await env.CHALLENGE_STORE.get('failedIds') || '[]');
+      let knownIds = JSON.parse(await env.CHALLENGE_STORE.get('knownIds') || '[]');
+      let failedIds = JSON.parse(await env.CHALLENGE_STORE.get('failedIds') || '[]');
       
       let currentId = lastTrackedId || START_CHALLENGE_ID;
       let consecutiveMissing = 0;
@@ -114,6 +114,13 @@ export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
     
+    // Challenge details by ID endpoint: /challenge/:id
+    const challengeMatch = url.pathname.match(/^\/challenge\/(\d+)$/);
+    if (challengeMatch) {
+      const challengeId = parseInt(challengeMatch[1]);
+      return handleChallengeDetails(challengeId);
+    }
+    
     // Manual trigger endpoint
     if (url.pathname === '/scan') {
       // Simulate a scheduled event
@@ -125,7 +132,7 @@ export default {
       return new Response('OK', { status: 200 });
     }
     
-    return new Response('Strava Challenge Tracker\n\nEndpoints:\n- /scan - Trigger manual scan\n- /health - Health check', { 
+    return new Response('Strava Challenge Tracker\n\nEndpoints:\n- /scan - Trigger manual scan\n- /health - Health check\n- /challenge/:id - Get details of a specific challenge by ID', { 
       status: 200,
       headers: { 'Content-Type': 'text/plain' }
     });
@@ -339,4 +346,53 @@ function escapeMarkdown(text) {
  */
 function delay(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+/**
+ * Handle request to get challenge details by ID
+ */
+async function handleChallengeDetails(challengeId) {
+  console.log(`Fetching details for challenge ID: ${challengeId}`);
+  
+  try {
+    const result = await fetchChallenge(challengeId);
+    
+    if (!result.exists) {
+      return new Response(
+        JSON.stringify({ 
+          success: false, 
+          error: result.error || 'Challenge not found',
+          message: `Challenge with ID ${challengeId} does not exist or is not accessible`
+        }), 
+        { 
+          status: result.error ? 503 : 404,
+          headers: { 'Content-Type': 'application/json' }
+        }
+      );
+    }
+    
+    return new Response(
+      JSON.stringify({ 
+        success: true, 
+        data: result.data 
+      }, null, 2), 
+      { 
+        status: 200,
+        headers: { 'Content-Type': 'application/json' }
+      }
+    );
+    
+  } catch (error) {
+    console.error('Error fetching challenge details:', error);
+    return new Response(
+      JSON.stringify({ 
+        success: false, 
+        error: error.message 
+      }), 
+      { 
+        status: 500,
+        headers: { 'Content-Type': 'application/json' }
+      }
+    );
+  }
 }

@@ -101,6 +101,40 @@ Or check health:
 curl https://your-worker.your-subdomain.workers.dev/health
 ```
 
+### Get Challenge Details by ID
+
+Fetch details of a specific challenge by providing its ID:
+
+```bash
+curl https://your-worker.your-subdomain.workers.dev/challenge/6386
+```
+
+**Example Response:**
+
+```json
+{
+  "success": true,
+  "data": {
+    "id": 6386,
+    "title": "Google Fun Run",
+    "description": "Complete 2 km",
+    "dateInterval": "Sep 1, 2026 to Sep 30, 2026",
+    "qualifyingActivities": "Run, Trail Run, Virtual Run, Walk",
+    "url": "https://www.strava.com/challenges/6386"
+  }
+}
+```
+
+**Error Response (Challenge Not Found):**
+
+```json
+{
+  "success": false,
+  "error": "Challenge not found",
+  "message": "Challenge with ID 9999 does not exist or is not accessible"
+}
+```
+
 ## Configuration Options
 
 ### Starting Challenge ID
