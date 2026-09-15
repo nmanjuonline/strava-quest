@@ -1,0 +1,23 @@
+{
+  "name": "strava-challenge-tracker",
+  "version": "1.0.0",
+  "description": "Track Strava challenges and get notified via Telegram",
+  "main": "src/index.js",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "init-kv": "wrangler kv:namespace create CHALLENGE_STORE"
+  },
+  "keywords": [
+    "strava",
+    "challenge",
+    "tracker",
+    "cloudflare",
+    "telegram"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "wrangler": "^3.0.0"
+  }
+}

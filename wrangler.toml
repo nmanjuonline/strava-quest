@@ -1,0 +1,16 @@
+name = "strava-challenge-tracker"
+main = "src/index.js"
+compatibility_date = "2024-01-01"
+
+[vars]
+TELEGRAM_BOT_TOKEN = "YOUR_TELEGRAM_BOT_TOKEN"
+TELEGRAM_CHAT_ID = "YOUR_TELEGRAM_CHAT_ID"
+
+# KV Namespace for persistent storage
+[[kv_namespaces]]
+binding = "CHALLENGE_STORE"
+id = "YOUR_KV_NAMESPACE_ID"
+
+# Cron trigger for twice daily execution (adjust times as needed)
+[triggers]
+crons = ["0 8 * * *", "0 20 * * *"]
