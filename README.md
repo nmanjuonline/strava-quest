@@ -150,17 +150,23 @@ Edit `wrangler.toml` and uncomment/set the `START_CHALLENGE_ID` variable:
 TELEGRAM_BOT_TOKEN = "your_actual_bot_token_here"
 TELEGRAM_CHAT_ID = "your_chat_id_here"
 START_CHALLENGE_ID = "6000"  # Change this value
+BATCH_SIZE = "40"  # Optional: Max challenges to check per scan (prevents subrequest limit errors)
 ```
 
 **Option 2: Default Value in Code**
 
-Edit `src/index.js` to change the default starting ID:
+Edit `src/index.js` to change the default values:
 
 ```javascript
 const DEFAULT_START_CHALLENGE_ID = 6000; // Change this value
+const DEFAULT_BATCH_SIZE = 40; // Change batch size if needed
 ```
 
 The environment variable takes precedence over the default value.
+
+**Why Batch Size Matters:**
+
+Cloudflare Workers have a limit on the number of subrequests (HTTP fetches) per invocation. The default batch size of 40 ensures you stay well under this limit while still making good progress through challenge IDs. If you encounter "Too many subrequests" errors, reduce this value.
 
 ### Consecutive Missing Threshold
 

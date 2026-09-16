@@ -6,7 +6,8 @@
  */
 
 // Configuration - START_CHALLENGE_ID can be overridden via environment variable
-const DEFAULT_START_CHALLENGE_ID = 6430;
+const DEFAULT_START_CHALLENGE_ID = 6000;
+const DEFAULT_BATCH_SIZE = 40; // Check max 40 IDs per scan to stay under subrequest limit (50-100)
 const MAX_CONSECUTIVE_MISSING = 4;
 const USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
 
@@ -18,14 +19,16 @@ export default {
     console.log('Starting Strava challenge scan...');
     
     try {
+      // Get configuration from environment or use defaults
+      const startId = env.START_CHALLENGE_ID ? parseInt(env.START_CHALLENGE_ID) : DEFAULT_START_CHALLENGE_ID;
+      const batchSize = env.BATCH_SIZE ? parseInt(env.BATCH_SIZE) : DEFAULT_BATCH_SIZE;
+      
       // Get the last tracked challenge ID from KV storage
       const lastTrackedIdText = await env.CHALLENGE_STORE.get('lastTrackedId');
       const lastTrackedId = lastTrackedIdText ? parseInt(lastTrackedIdText) : null;
       let knownIds = JSON.parse(await env.CHALLENGE_STORE.get('knownIds') || '[]');
       let failedIds = JSON.parse(await env.CHALLENGE_STORE.get('failedIds') || '[]');
       
-      // Use environment variable if set, otherwise use default
-      const startId = env.START_CHALLENGE_ID ? parseInt(env.START_CHALLENGE_ID) : DEFAULT_START_CHALLENGE_ID;
       let currentId = lastTrackedId || startId;
       let consecutiveMissing = 0;
       let newChallengesFound = [];
@@ -52,11 +55,13 @@ export default {
       // Clear failed IDs that were successfully retrieved
       failedIds = failedIds.filter(id => !knownIds.includes(id));
       
-      // Now scan for new challenges starting from last tracked ID
-      console.log(`Scanning from challenge ID: ${currentId}`);
+      // Now scan for new challenges starting from last tracked ID (limited by batch size)
+      console.log(`Scanning from challenge ID: ${currentId} (max ${batchSize} per scan)`);
       
-      while (consecutiveMissing < MAX_CONSECUTIVE_MISSING) {
+      let scannedCount = 0;
+      while (consecutiveMissing < MAX_CONSECUTIVE_MISSING && scannedCount < batchSize) {
         const result = await fetchChallenge(currentId);
+        scannedCount++;
         
         if (result.exists) {
           console.log(`Found challenge: ${currentId}`);
@@ -88,7 +93,11 @@ export default {
         await delay(1000);
       }
       
-      console.log(`Stopped after ${MAX_CONSECUTIVE_MISSING} consecutive missing challenges.`);
+      if (scannedCount >= batchSize) {
+        console.log(`Reached batch limit of ${batchSize} challenges. Will continue in next scan.`);
+      } else {
+        console.log(`Stopped after ${MAX_CONSECUTIVE_MISSING} consecutive missing challenges.`);
+      }
       
       // Send notifications for new challenges
       if (newChallengesFound.length > 0) {

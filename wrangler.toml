@@ -3,9 +3,10 @@ main = "src/index.js"
 compatibility_date = "2024-01-01"
 
 [vars]
-TELEGRAM_BOT_TOKEN = "8727671898:AAGKMxs6tHJWSTceoDuZ7PC6nrjbIEp_6FM"
-TELEGRAM_CHAT_ID = "-1002659605097"
+TELEGRAM_BOT_TOKEN = "YOUR_TELEGRAM_BOT_TOKEN"
+TELEGRAM_CHAT_ID = "YOUR_TELEGRAM_CHAT_ID"
 # START_CHALLENGE_ID = "6000"  # Optional: Override the starting challenge ID
+# BATCH_SIZE = "40"  # Optional: Override the batch size (max challenges to check per scan)
 
 # KV Namespace for persistent storage
 [[kv_namespaces]]
